@@ -1,12 +1,5 @@
 import { create } from "zustand";
-
-export interface Etf {
-  id: string;
-  ticker: string;
-  name: string;
-  quantity: number;
-  averagePrice: number;
-}
+import type { Etf } from "../types";
 
 interface EtfStore {
   etfs: Etf[];
