@@ -132,6 +132,105 @@ dividend-logbook/
 - **백엔드**: (추가 예정)
 - **데이터베이스**: (추가 예정)
 
+## 🎨 스타일링 설정
+
+### Emotion Provider (`src/app/providers.tsx`)
+
+이 프로젝트는 Emotion을 사용하여 스타일링을 관리하며, 서버 사이드 렌더링(SSR)과 클라이언트 사이드 하이드레이션을 지원합니다.
+
+#### 주요 기능
+
+1. **Emotion Cache 생성**
+
+   ```typescript
+   const [cache] = useState(() => {
+     const cache = createCache({ key: "css" });
+     cache.compat = true;
+     return cache;
+   });
+   ```
+
+   - Emotion 스타일 캐시를 생성하여 스타일 충돌 방지
+   - `key: "css"`로 CSS 클래스명 접두사 설정
+   - `compat: true`로 호환 모드 활성화
+
+2. **서버 사이드 스타일 주입**
+
+   ```typescript
+   useServerInsertedHTML(() => {
+     const cssVariables = themeToCSSVariables(theme);
+     return (
+       <>
+         <style key="theme-variables" dangerouslySetInnerHTML={{ __html: cssVariables }} />
+         <style data-emotion={...} dangerouslySetInnerHTML={{ __html: ... }} />
+       </>
+     );
+   });
+   ```
+
+   - `useServerInsertedHTML`: Next.js에서 서버 렌더링 시 `<head>`에 스타일 주입
+   - 테마 CSS 변수 주입: `theme.ts`의 디자인 토큰을 CSS 변수로 변환하여 주입
+   - Emotion 스타일 주입: 서버 컴포넌트에서 생성된 스타일을 주입
+
+3. **Provider 구성**
+   ```typescript
+   return (
+     <CacheProvider value={cache}>
+       <ThemeProvider theme={theme}>{children}</ThemeProvider>
+     </CacheProvider>
+   );
+   ```
+   - `CacheProvider`: Emotion 캐시를 하위 컴포넌트에 제공
+   - `ThemeProvider`: 테마 객체를 제공하여 styled 컴포넌트에서 `props.theme`으로 접근 가능
+
+#### 작동 원리
+
+1. **서버 렌더링**: `useServerInsertedHTML`을 통해 CSS 변수와 Emotion 스타일을 `<head>`에 주입
+2. **클라이언트 하이드레이션**: 동일한 캐시와 테마를 사용하여 서버와 클라이언트 스타일 일치
+3. **스타일 사용**: 하위 컴포넌트에서 Emotion styled components와 CSS 변수 모두 사용 가능
+
+#### 장점
+
+- ✅ **SSR 호환**: 서버에서 생성된 스타일이 클라이언트와 정확히 일치
+- ✅ **성능 최적화**: 스타일을 `<head>`에 주입하여 FOUC(Flash of Unstyled Content) 방지
+- ✅ **테마 공유**: Emotion과 CSS 변수 모두에서 동일한 테마 값 사용 가능
+- ✅ **타입 안정성**: TypeScript로 테마 타입 추론 및 자동완성 지원
+
+### 디자인 토큰 사용
+
+#### Emotion에서 사용
+
+```typescript
+import styled from "@emotion/styled";
+import { theme } from "@/styles/theme";
+
+const Button = styled.button`
+  color: ${theme.colors.primary};
+  padding: ${theme.spacing.md};
+  border-radius: ${theme.borderRadius.md};
+`;
+```
+
+또는 ThemeProvider를 통해:
+
+```typescript
+const Button = styled.button`
+  color: ${(props) => props.theme.colors.primary};
+  padding: ${(props) => props.theme.spacing.md};
+`;
+```
+
+#### CSS 변수로 사용 (`globals.css`)
+
+```css
+.button {
+  color: var(--color-primary);
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-size: var(--font-size-base);
+}
+```
+
 ## 📝 사용 예시
 
 ### ETF 추가
