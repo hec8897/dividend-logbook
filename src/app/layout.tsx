@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import "./globals.css";
 import EmotionProvider from "./providers";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
+
+import { Container } from "@/styles";
 
 export const metadata: Metadata = {
   title: "Dividend Logbook",
@@ -19,9 +19,9 @@ export default function RootLayout({
     <html lang="ko">
       <body>
         <EmotionProvider>
-          <Header />
-          <main style={{ minHeight: "calc(100vh - 200px)" }}>{children}</main>
-          <Footer />
+          <Container>
+            <main>{children}</main>
+          </Container>
         </EmotionProvider>
       </body>
     </html>
