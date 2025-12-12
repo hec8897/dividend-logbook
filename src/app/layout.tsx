@@ -1,11 +1,9 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+
 import "./globals.css";
 import EmotionProvider from "./providers";
-import Header from "@/components/common/Header";
-import Footer from "@/components/common/Footer";
 
-const inter = Inter({ subsets: ["latin"] });
+import { Container } from "@/styles";
 
 export const metadata: Metadata = {
   title: "Dividend Logbook",
@@ -19,11 +17,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body>
         <EmotionProvider>
-          <Header />
-          <main style={{ minHeight: "calc(100vh - 200px)" }}>{children}</main>
-          <Footer />
+          <Container>
+            <main>{children}</main>
+          </Container>
         </EmotionProvider>
       </body>
     </html>
