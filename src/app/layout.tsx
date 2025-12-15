@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import "./globals.css";
-import EmotionProvider from "./providers";
+import Providers from "./providers";
 
 import { Container } from "@/styles";
 
@@ -18,11 +18,11 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body>
-        <EmotionProvider>
+        <Providers>
           <Container>
             <main>{children}</main>
           </Container>
-        </EmotionProvider>
+        </Providers>
       </body>
     </html>
   );
