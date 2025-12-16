@@ -20,11 +20,11 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    const { get } = request.nextUrl.searchParams;
-    const category = get("category");
-    const search = get("search");
-    const sortBy = get("sortBy");
-    const limit = get("limit");
+    const searchParams = request.nextUrl.searchParams;
+    const category = searchParams.get("category");
+    const search = searchParams.get("search");
+    const sortBy = searchParams.get("sortBy");
+    const limit = searchParams.get("limit");
 
     let result = mockETFList;
 

@@ -1,10 +1,23 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 /**
+ * 서버/클라이언트 환경에 따른 baseURL 설정
+ */
+const getBaseURL = () => {
+  // 서버 사이드 (Node.js 환경)
+  if (typeof window === "undefined") {
+    // 서버에서는 절대 URL 사용
+    return process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
+  }
+  // 클라이언트 사이드 (브라우저 환경)
+  return process.env.NEXT_PUBLIC_API_BASE_URL || "/api";
+};
+
+/**
  * Axios 인스턴스 생성 및 설정
  */
 const axiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL || "/api",
+  baseURL: getBaseURL(),
   timeout: 10000, // 10초
   headers: {
     "Content-Type": "application/json",
