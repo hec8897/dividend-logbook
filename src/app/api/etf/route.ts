@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from "next/server";
 import {
   mockETFList,
   getETFsByCategory,
@@ -6,12 +6,12 @@ import {
   getETFsSortedByMarketCap,
   searchETFs,
   getCategories,
-} from '@/lib/mock';
+} from "@/lib/mock";
 
 /**
  * GET /api/etf
  * ETF 목록 조회 API
- * 
+ *
  * Query Parameters:
  * - category: 카테고리별 필터링
  * - search: 검색어 (종목명 또는 티커)
@@ -20,11 +20,11 @@ import {
  */
 export async function GET(request: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const category = searchParams.get('category');
-    const search = searchParams.get('search');
-    const sortBy = searchParams.get('sortBy');
-    const limit = searchParams.get('limit');
+    const { get } = request.nextUrl.searchParams;
+    const category = get("category");
+    const search = get("search");
+    const sortBy = get("sortBy");
+    const limit = get("limit");
 
     let result = mockETFList;
 
@@ -39,9 +39,9 @@ export async function GET(request: NextRequest) {
     }
 
     // 정렬
-    if (sortBy === 'dividend') {
+    if (sortBy === "dividend") {
       result = getETFsSortedByDividend();
-    } else if (sortBy === 'marketCap') {
+    } else if (sortBy === "marketCap") {
       result = getETFsSortedByMarketCap();
     }
 
@@ -61,12 +61,12 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error('ETF API Error:', error);
+    console.error("ETF API Error:", error);
     return NextResponse.json(
       {
         success: false,
-        error: 'Failed to fetch ETF data',
-        message: error instanceof Error ? error.message : 'Unknown error',
+        error: "Failed to fetch ETF data",
+        message: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }
     );
@@ -79,11 +79,10 @@ export async function GET(request: NextRequest) {
  */
 export async function OPTIONS() {
   const categories = getCategories();
-  
+
   return NextResponse.json({
     success: true,
     data: categories,
     timestamp: new Date().toISOString(),
   });
 }
-
