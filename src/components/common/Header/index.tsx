@@ -2,6 +2,7 @@
 import styled from "@emotion/styled";
 import { FlexContainer } from "@/components/ui";
 import { ChevronLeft, Search, Menu } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const HeaderContainer = styled.header`
   height: 64px;
@@ -10,10 +11,13 @@ const HeaderContainer = styled.header`
 `;
 
 export default function Header() {
+  const { back } = useRouter();
   return (
     <HeaderContainer>
       <FlexContainer justify="space-between" align="center" fullHeight>
-        <ChevronLeft />
+        <button onClick={back}>
+          <ChevronLeft />
+        </button>
         <h1>Dividend Logbook</h1>
         <FlexContainer>
           <Search />
