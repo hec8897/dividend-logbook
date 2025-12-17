@@ -1,6 +1,7 @@
 "use client";
 import styled from "@emotion/styled";
 import { FlexContainer } from "@/components/ui";
+import { ChevronLeft, Search, Menu } from "lucide-react";
 
 const HeaderContainer = styled.header`
   height: 64px;
@@ -12,9 +13,12 @@ export default function Header() {
   return (
     <HeaderContainer>
       <FlexContainer justify="space-between" align="center" fullHeight>
-        <div>1</div>
+        <ChevronLeft />
         <h1>Dividend Logbook</h1>
-        <div>1</div>
+        <FlexContainer>
+          <Search />
+          <Menu />
+        </FlexContainer>
       </FlexContainer>
     </HeaderContainer>
   );
