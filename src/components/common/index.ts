@@ -2,3 +2,4 @@
 export { default as Header } from "./Header";
 export { ErrorBoundary, ErrorFallback } from "./ErrorBoundary";
 export { Loading, SkeletonLoading } from "./Loading";
+export { default as Portal } from "./Portal";
