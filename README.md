@@ -12,6 +12,7 @@ Dividend Logbook은 개인이 보유한 ETF(상장지수펀드)의 정보를 관
 
   - 보유 ETF 목록 조회 및 관리
   - ETF 기본 정보 (티커, 이름, 보유 수량 등) 저장
+  - 실시간 주식 가격 조회 (한국투자증권 API)
 
 - **배당 수익 추적**
 
@@ -47,6 +48,22 @@ cd dividend-logbook
 # 의존성 설치
 npm install
 ```
+
+### 환경 변수 설정
+
+`.env.local` 파일을 생성하고 다음 환경 변수를 설정하세요:
+
+```bash
+# KIS API 설정 (한국투자증권 Open API)
+KIS_APP_KEY=your_app_key_here
+KIS_APP_SECRET=your_app_secret_here
+KIS_BASE_URL=https://openapi.koreainvestment.com:9443
+
+# API Base URL (옵션)
+NEXT_PUBLIC_API_BASE_URL=/api
+```
+
+자세한 내용은 `env.example` 파일을 참고하세요.
 
 ### 실행 방법
 
@@ -108,6 +125,21 @@ dividend-logbook/
 │   │   ├── common/           # 공통 컴포넌트 (Header, Footer 등)
 │   │   └── ui/               # 기본 UI 컴포넌트 (Button, Input 등)
 │   ├── lib/                  # 유틸리티 및 라이브러리
+│   │   ├── api/              # API 클라이언트
+│   │   │   ├── axios.ts      # Axios 설정
+│   │   │   ├── etf.ts        # ETF API
+│   │   │   ├── index.ts
+│   │   │   └── kis/          # 한국투자증권 API
+│   │   │       ├── client.ts    # KIS API 클라이언트
+│   │   │       ├── queries.ts   # TanStack Query 훅
+│   │   │       ├── types.ts     # 타입 정의
+│   │   │       ├── index.ts
+│   │   │       └── store/       # KIS 토큰 상태 관리
+│   │   │           └── useTokenStore.ts
+│   │   ├── config/           # 설정 파일
+│   │   │   └── env.ts        # 환경변수 관리
+│   │   ├── store/            # 전역 상태 관리 (Zustand)
+│   │   │   └── useAuthStore.ts  # 예: 사용자 인증 상태
 │   │   ├── mock/             # 목업 데이터
 │   │   ├── queryClient.ts    # TanStack Query 설정
 │   │   └── utils/            # 유틸리티 함수
@@ -130,6 +162,12 @@ dividend-logbook/
 - **hooks/**: 도메인 전용 커스텀 훅 (필요시)
 - **index.ts**: 도메인의 public API를 정의하는 export 파일
 
+### 상태 관리 구조
+
+- **도메인별 Store** (`src/domains/{domain}/store/`): 각 도메인의 비즈니스 로직 상태
+- **API별 Store** (`src/lib/api/{api}/store/`): API 클라이언트 관련 상태 (예: KIS 토큰)
+- **전역 Store** (`src/lib/store/`): 애플리케이션 전역 상태 (예: 사용자 인증, 테마 등)
+
 ## 🛠 기술 스택
 
 - **프론트엔드**: Next.js 16 (App Router)
@@ -137,6 +175,7 @@ dividend-logbook/
 - **상태 관리**: Zustand, TanStack Query
 - **스타일링**: Emotion
 - **HTTP 클라이언트**: axios
+- **외부 API**: 한국투자증권(KIS) Open API
 - **백엔드**: Next.js API Routes (서버리스)
 - **데이터베이스**: (추가 예정)
 
@@ -146,6 +185,8 @@ dividend-logbook/
 
 - [아키텍처 가이드](./docs/ARCHITECTURE.md) - 백엔드 구조, 데이터 페칭, 에러 처리
 - [스타일링 가이드](./docs/STYLING.md) - Emotion 설정, 테마 시스템, 모범 사례
+- [KIS API 가이드](./docs/KIS_API.md) - 한국투자증권 API 연동, 토큰 관리
+- [TanStack Query 가이드](./docs/TANSTACK_QUERY.md) - React Query 사용법, 패턴
 
 ## 📝 사용 예시
 
