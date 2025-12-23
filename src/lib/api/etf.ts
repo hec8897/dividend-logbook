@@ -6,6 +6,7 @@ import type {
   ETFCategoriesResponse,
   ETFQueryParams,
 } from "@/domains/etf/types";
+import { kisClient } from "./kis/client";
 
 /**
  * ETF API 클라이언트
@@ -22,7 +23,11 @@ export const etfApi = {
    * ```
    */
   getList: async (params?: ETFQueryParams): Promise<ETF[]> => {
-    const response = await apiClient.get<ETFListResponse>("/etf", { params });
+    const response = await kisClient.authenticatedGet<ETFListResponse>(
+      "/api/kis/stock/005930",
+      "FHKST01010100",
+      { params }
+    );
     return response.data.data;
   },
 

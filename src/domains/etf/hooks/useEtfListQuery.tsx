@@ -1,6 +1,6 @@
 "use client";
 
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 import { etfApi } from "@/lib/api";
 
 /**
@@ -8,7 +8,7 @@ import { etfApi } from "@/lib/api";
  * ErrorBoundary + Suspense와 함께 사용
  */
 export const useSuspenseEtfListQuery = () => {
-  const query = useSuspenseQuery({
+  const query = useQuery({
     queryKey: ["etfList"],
     queryFn: () => etfApi.getList(),
   });
